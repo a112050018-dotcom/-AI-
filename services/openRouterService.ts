@@ -39,16 +39,16 @@ const getSystemPrompt = (style: AnswerStyle): string => {
 
 export const fetchOracleAnswer = async (question: string, style: AnswerStyle): Promise<string> => {
   // If user didn't type anything, we use a generic placeholder for the "mind" question
-  const userContent = question.trim() ? `The question is: "${question}"` : "I am holding a question in my mind.";
+  const userQuestionInput = question.trim() ? `The question is: "${question}"` : "I am holding a question in my mind.";
+  
+  // Combine system instructions with user input
+  const systemInstruction = getSystemPrompt(style);
+  const combinedContent = `${systemInstruction}\n\n${userQuestionInput}`;
 
   const messages: OpenRouterMessage[] = [
     {
-      role: 'system',
-      content: getSystemPrompt(style)
-    },
-    {
       role: 'user',
-      content: userContent
+      content: combinedContent
     }
   ];
 
